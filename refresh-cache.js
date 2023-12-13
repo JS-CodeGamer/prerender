@@ -10,10 +10,16 @@ if (!prerender_url) {
 }
 
 // parse arguments
+// argument sample
+// for single link : node refresh-cache.js --1=https://www.example.com
+// for sitemap : node refresh-cache.js --sitemap-url=https://www.example.com/sitemap.xml
+// depricated:
+//      for adding rate limit : node refresh-cache.js --api-rate-limit=500
+//                                      --sitemap-url=https://www.example.com/sitemap.xml
 const args = arg_parser(process.argv);
 const {
     ["sitemap-url"]: sitemap_url,
-    ["api-rate-limit"]: api_rate_limit = 500,
+    ["api-rate-limit"]: api_rate_limit = 20,
     ["1"]: single_url = undefined,
 } = args;
 
@@ -48,7 +54,7 @@ async function refreshCacheForSitemap(sitemap_url) {
                 .map(refreshCacheForUrl)
         );
         // wait for 1min after api_rate_limit calls
-        await new Promise((resolve) => setTimeout(resolve, 1000 * 60));
+        new Promise((resolve) => setTimeout(resolve, 1000 * 60));
     }
 }
 
